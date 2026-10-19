@@ -13,8 +13,6 @@ import com.raincat.dolby_beta.helper.WorkerHelper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.lang.reflect.Method;
-
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 
@@ -31,9 +29,7 @@ import de.robv.android.xposed.XposedBridge;
 
 public class EAPIHook {
     public EAPIHook(final Context context) {
-        Method resultMethod = ClassHelper.HttpResponse.getResultMethod(context);
-        XposedBridge.log("[dolby_beta] EAPI result method=" + resultMethod);
-        XposedBridge.hookMethod(resultMethod, new XC_MethodHook() {
+        XposedBridge.hookMethod(ClassHelper.HttpResponse.getResultMethod(context), new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 //代理、Worker 和黑胶都未开启
@@ -55,7 +51,6 @@ public class EAPIHook {
                 if (!uri.getPath().contains("/eapi/"))
                     return;
                 String path = uri.getPath();
-                XposedBridge.log("[dolby_beta] EAPI path=" + path);
 
                 if (path.contains("song/enhance/player/url")) {
                     original = EAPIHelper.modifyPlayer(original);

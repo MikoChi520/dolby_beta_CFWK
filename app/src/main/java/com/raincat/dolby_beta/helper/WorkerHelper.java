@@ -30,15 +30,12 @@ public final class WorkerHelper {
 
     public static String modifyPlayer(String original) {
         if (!SettingHelper.getInstance().isEnable(SettingHelper.worker_key)) {
-            Log.i(TAG, "worker disabled");
             return original;
         }
         String base = normalize(SettingHelper.getInstance().getWorkerUrl());
         if (TextUtils.isEmpty(base)) {
-            Log.i(TAG, "worker url empty");
             return original;
         }
-        Log.i(TAG, "worker request base=" + base);
         // NetEase normally calls this hook on a worker thread. Avoid a
         // NetworkOnMainThreadException if an old client calls it synchronously.
         if (Looper.myLooper() == Looper.getMainLooper()) {
@@ -106,7 +103,6 @@ public final class WorkerHelper {
                     changed = true;
                 }
             }
-            Log.i(TAG, "worker response count=" + results.length() + " changed=" + changed);
             if (!changed) {
                 return original;
             }
