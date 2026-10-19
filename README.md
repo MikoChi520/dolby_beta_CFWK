@@ -144,3 +144,4 @@ Actions → Android CI → Run workflow
 - [nondanee/UnblockNeteaseMusic](https://github.com/nondanee/UnblockNeteaseMusic)
 - [luoxingran/dolby_beta](https://github.com/luoxingran/dolby_beta)
 - [nining377/dolby_beta](https://github.com/nining377/dolby_beta)
+- [NikolaJyun/dolby_beta](https://github.com/NikolaJyun/dolby_beta)
