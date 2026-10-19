@@ -613,10 +613,28 @@ public class ClassHelper {
             if (getResultMethod == null) {
                 try {
                     List<Method> methodList = Arrays.asList(getClazz(context).getDeclaredMethods());
-                    getResultMethod = Stream.of(methodList)
-                            .filter(m -> m.getExceptionTypes().length == 2)
-                            .findFirst()
-                            .get();
+                    Method method = null;
+                    for (Method item : methodList) {
+                        if (item.getExceptionTypes().length == 2) {
+                            method = item;
+                            break;
+                        }
+                    }
+                    if (method == null) {
+                        // NetEase 8.x exposes the parsed result as an Object-returning,
+                        // no-argument method instead of a method declaring two exceptions.
+                        for (Method item : methodList) {
+                            if (item.getParameterTypes().length == 0
+                                    && item.getReturnType() == Object.class) {
+                                method = item;
+                                break;
+                            }
+                        }
+                    }
+                    if (method == null) {
+                        throw new NoSuchMethodException("getResult method not found");
+                    }
+                    getResultMethod = method;
                 } catch (Exception e) {
                     MessageHelper.sendNotification(context, MessageHelper.coreClassNotFoundCode);
                 }

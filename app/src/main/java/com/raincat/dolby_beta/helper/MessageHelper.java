@@ -45,9 +45,15 @@ public class MessageHelper {
                 break;
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            NotificationHelper.getInstance(context).sendUnLockNotification(context, intent.getIntExtra("code", 0x10),
-                    intent.getStringExtra("title"), intent.getStringExtra("title"), intent.getStringExtra("message"));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                NotificationHelper.getInstance(context).sendUnLockNotification(context, intent.getIntExtra("code", 0x10),
+                        intent.getStringExtra("title"), intent.getStringExtra("title"), intent.getStringExtra("message"));
+            } catch (Throwable ignored) {
+                // Some OEM resource implementations cannot load the host app icon.
+                // Notification failure must not abort hook installation.
+            }
+        }
         XposedBridge.log(intent.getStringExtra("title") + "：" + intent.getStringExtra("message"));
     }
 
