@@ -1586,6 +1586,10 @@ public class SettingHook {
         dialogProxyRoot = new BaseDialogItem(context);
         dialogProxyRoot.setOrientation(LinearLayout.VERTICAL);
         ProxyMasterView proxyMasterView = new ProxyMasterView(context);
+        ProxyWorkerView proxyWorkerView = new ProxyWorkerView(context);
+        proxyWorkerView.setBaseOnView(proxyMasterView);
+        ProxyWorkerUrlView proxyWorkerUrlView = new ProxyWorkerUrlView(context);
+        proxyWorkerUrlView.setBaseOnView(proxyWorkerView);
         ProxyCoverView proxyCoverView = new ProxyCoverView(context);
         proxyCoverView.setBaseOnView(proxyMasterView);
         ProxyServerView proxyServerView = new ProxyServerView(context);
@@ -1606,6 +1610,8 @@ public class SettingHook {
 
         dialogProxyRoot.addView(new ProxyTitleView(context));
         dialogProxyRoot.addView(proxyMasterView);
+        dialogProxyRoot.addView(proxyWorkerView);
+        dialogProxyRoot.addView(proxyWorkerUrlView);
         dialogProxyRoot.addView(proxyCoverView);
         dialogProxyRoot.addView(proxyServerView);
         dialogProxyRoot.addView(proxyPriorityView);

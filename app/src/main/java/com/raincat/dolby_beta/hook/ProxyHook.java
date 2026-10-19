@@ -95,6 +95,11 @@ public class ProxyHook {
 
         if (!isPlayProcess) {
             ExtraHelper.setExtraDate(ExtraHelper.SCRIPT_STATUS, "0");
+            // Worker API mode talks to HTTPS JSON directly. Starting the local
+            // Node script or installing an HTTP proxy is not needed.
+            if (SettingHelper.getInstance().isEnable(SettingHelper.worker_key)) {
+                return;
+            }
             if (SettingHelper.getInstance().getSetting(SettingHelper.proxy_master_key)) {
                 ScriptHelper.initScript(context, false);
                 if (SettingHelper.getInstance().getSetting(SettingHelper.proxy_server_key)) {
@@ -119,6 +124,14 @@ public class ProxyHook {
             objectProxy = proxyField.get(client);
         if (objectSSLSocketFactory == null)
             objectSSLSocketFactory = sslSocketFactoryField.get(client);
+
+        if (SettingHelper.getInstance().isEnable(SettingHelper.worker_key)) {
+            // Switching from proxy mode to Worker mode must remove a proxy
+            // that was installed on an already-created OkHttp client.
+            proxyField.set(client, objectProxy);
+            sslSocketFactoryField.set(client, objectSSLSocketFactory);
+            return;
+        }
 
         if (ExtraHelper.getExtraDate(ExtraHelper.SCRIPT_STATUS).equals("1")) {
             String httpUrlHost = SettingHelper.getInstance().getSetting(SettingHelper.proxy_server_key) ?

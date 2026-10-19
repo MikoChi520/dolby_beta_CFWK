@@ -8,6 +8,7 @@ import com.raincat.dolby_beta.db.CloudDao;
 import com.raincat.dolby_beta.helper.ClassHelper;
 import com.raincat.dolby_beta.helper.EAPIHelper;
 import com.raincat.dolby_beta.helper.SettingHelper;
+import com.raincat.dolby_beta.helper.WorkerHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,9 +32,10 @@ public class EAPIHook {
         XposedBridge.hookMethod(ClassHelper.HttpResponse.getResultMethod(context), new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                //代理和黑胶都未开启
+                //代理、Worker 和黑胶都未开启
                 if (!SettingHelper.getInstance().isEnable(SettingHelper.black_key)
-                        && !SettingHelper.getInstance().isEnable(SettingHelper.proxy_master_key))
+                        && !SettingHelper.getInstance().isEnable(SettingHelper.proxy_master_key)
+                        && !SettingHelper.getInstance().isEnable(SettingHelper.worker_key))
                     return;
                 //返回参数不对
                 if ((!(param.getResult() instanceof String) && !(param.getResult() instanceof JSONObject)))
@@ -52,6 +54,7 @@ public class EAPIHook {
 
                 if (path.contains("song/enhance/player/url")) {
                     original = EAPIHelper.modifyPlayer(original);
+                    original = WorkerHelper.modifyPlayer(original);
                 } else if (path.contains("song/enhance/download/url")) {
                     JSONObject jsonObject = new JSONObject(original);
                     JSONObject object = jsonObject.getJSONObject("data");
@@ -60,6 +63,7 @@ public class EAPIHook {
                     jsonObject.put("data", array);
                     original = EAPIHelper.modifyPlayer(jsonObject.toString())
                             .replace("[", "").replace("]", "");
+                    original = WorkerHelper.modifyPlayer(original);
                 } else if (path.contains("v1/playlist/manipulate/tracks")) {
                     original = EAPIHelper.modifyManipulate(ClassHelper.HttpParams.getParams(context, eapi), original);
                 } else if (path.contains("song/like")) {

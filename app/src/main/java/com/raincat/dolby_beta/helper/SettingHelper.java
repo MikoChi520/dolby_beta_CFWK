@@ -88,6 +88,14 @@ public class SettingHelper {
     public static final String proxy_server_title = "服务器代理模式";
     public static final String proxy_server_sub = "如果您不想使用高占用的node，有自己的服务器代理可使用此方式并填写自己的服务器地址与端口，且使用服务器对应音质";
 
+    public static final String worker_key = "β_worker_key";
+    public static final String worker_title = "Worker API 模式";
+    public static final String worker_sub = "直接调用 Cloudflare Worker 补全音源，不启动本地脚本或 TLS 中间人；关闭后恢复原代理模式";
+
+    public static final String worker_url_key = "β_worker_url_key";
+    public static final String worker_url_title = "Worker 地址";
+    public static final String worker_url_default = "https://music.bro.us.ci";
+
     public static final String proxy_priority_key = "β_proxy_priority_key";
     public static final String proxy_priority_title = "音质优先";
     public static final String proxy_priority_sub = "音质优先：使用外部音源提高音质，不可避免的会增大匹配错误概率\n匹配度优先：尽可能采用网易云音源，但非会员很多曲目只有128K/96K";
@@ -212,6 +220,7 @@ public class SettingHelper {
         settingMap.put(sign_song_key, sharedPreferences.getBoolean(sign_song_key, false));
 
         settingMap.put(proxy_master_key, sharedPreferences.getBoolean(proxy_master_key, true));
+        settingMap.put(worker_key, sharedPreferences.getBoolean(worker_key, true));
         settingMap.put(proxy_server_key, sharedPreferences.getBoolean(proxy_server_key, false));
         settingMap.put(proxy_priority_key, sharedPreferences.getBoolean(proxy_priority_key, false));
         settingMap.put(proxy_flac_key, sharedPreferences.getBoolean(proxy_flac_key, false));
@@ -259,6 +268,8 @@ public class SettingHelper {
         deleteSetting(sign_key);
         deleteSetting(sign_song_key);
         deleteSetting(proxy_master_key);
+        deleteSetting(worker_key);
+        deleteSetting(worker_url_key);
         deleteSetting(proxy_server_key);
         deleteSetting(proxy_priority_key);
         deleteSetting(proxy_flac_key);
@@ -346,6 +357,15 @@ public class SettingHelper {
     public String getLocalVip() {
         String value = sharedPreferences.getString(SettingHelper.local_vip_key, SettingHelper.local_vip_default);
         return value == null ? "" : value.trim();
+    }
+
+    public String getWorkerUrl() {
+        String value = sharedPreferences.getString(SettingHelper.worker_url_key, SettingHelper.worker_url_default);
+        return value == null ? SettingHelper.worker_url_default : value.trim();
+    }
+
+    public void setWorkerUrl(String url) {
+        sharedPreferences.edit().putString(SettingHelper.worker_url_key, url == null ? "" : url.trim()).apply();
     }
 
     public void setLocalVip(String value) {
