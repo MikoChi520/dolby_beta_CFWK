@@ -33,9 +33,91 @@ https://music.nix.de5.net
 
 ## Worker 端
 
-Worker 需要部署配套的 Cloudflare Worker（根目录单文件 `worker.js`，或对应 `server/` 工程）。KV 绑定变量名为 `UNM_CACHE`，Cookie 通过 KV 管理。
+仓库根目录的 `worker.js` 是**单文件 Worker**，已经内嵌监控页和全部 API，不需要额外部署前端，也不需要 Node 或 Assets 绑定。
 
-## 构建
+它使用两个独立的 KV：
+
+| 绑定名 | 用途 |
+| --- | --- |
+| `music_cache` | 音频缓存 + 最近一次返回记录，最近记录只保留 24 小时 |
+| `custom_ms` | 右上角齿轮里保存的自定义音源 |
+
+不要再使用旧的 `UNM_CACHE`。旧的 `UNM_CACHE` 数据不会自动迁移，自定义源需要在新的设置页重新保存一次。
+
+### 方式一：Cloudflare 控制台部署
+
+1. 登录 [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages**。
+2. 进入 **KV**，创建两个命名空间：
+   - `music_cache`
+   - `custom_ms`
+3. 回到 **Workers & Pages** → **Create** → **Worker**，新建一个 Worker。
+4. 打开该 Worker 的 **Settings → Bindings → Add binding → KV namespace**，添加：
+   - Variable name: `music_cache`，选择 `music_cache` 命名空间
+   - Variable name: `custom_ms`，选择 `custom_ms` 命名空间
+
+   **Variable name 必须和上面完全一致。**
+5. 打开 **Edit code**，删掉模板代码，把本仓库根目录的 `worker.js` 全部粘贴进去。
+6. 点击 **Deploy**。
+7. 访问 Worker 的 `https://<worker>.<subdomain>.workers.dev/`，能看到监控页即部署成功。
+8. 如果要用自己的域名，在 Worker 的 **Settings → Domains & Routes** 里绑定自定义域名。
+
+### 方式二：Wrangler 部署
+
+在仓库根目录创建 `wrangler.toml`：
+
+```toml
+name = "neo-unblock-netease-music"
+main = "worker.js"
+compatibility_date = "2025-08-01"
+
+[[kv_namespaces]]
+binding = "music_cache"
+id = "替换成 music_cache 的 id"
+
+[[kv_namespaces]]
+binding = "custom_ms"
+id = "替换成 custom_ms 的 id"
+```
+
+创建 KV 并部署：
+
+```bash
+npx wrangler kv namespace create music_cache
+npx wrangler kv namespace create custom_ms
+npx wrangler deploy
+```
+
+### 配置到 Android 模块
+
+Worker 部署好后，复制它的地址，例如：
+
+```text
+https://music.example.com
+```
+
+在网易云 → 设置 → **Worker API 设置** 中：
+
+1. 打开 **Worker API 模式**
+2. 在 **Worker 地址** 填入上面的地址，不要带末尾 `/`
+3. 点击 **保存并重启**，或强制停止网易云后重新打开
+
+### 验证
+
+```bash
+# 健康检查
+curl https://你的-worker/health
+
+# 直接测试一首歌
+curl 'https://你的-worker/match?id=347230'
+```
+
+健康检查应返回 `providers` 中包含 `pyncmd`、`qq`、`netease`、`custom`。
+
+### 更新 Worker
+
+重新生成 `worker.js` 后，只需要在 Cloudflare 控制台 **Edit code** 中整段替换并重新 **Deploy**。KV 数据不会丢失，不需要重新绑定。
+
+## 构建 Android APK
 
 仓库通过 GitHub Actions 构建：
 
