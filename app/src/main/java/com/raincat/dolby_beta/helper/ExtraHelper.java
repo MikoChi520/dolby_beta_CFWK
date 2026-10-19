@@ -25,10 +25,6 @@ public class ExtraHelper {
     public static final String COOKIE = "cookie";
     //我喜欢的音乐的id
     public static final String LOVE_PLAY_LIST = "play_list";
-    //签到时间
-    public static final String SIGN_TIME = "sign_time";
-    //打卡时间
-    public static final String SIGN_SONG_TIME = "sign_song_time";
 
     //初始化数据库
     public static void init(Context context) {
@@ -50,7 +46,5 @@ public class ExtraHelper {
         setExtraDate(COOKIE, "-1");
         setExtraDate(USER_ID, "-1");
         setExtraDate(LOVE_PLAY_LIST, "-1");
-        setExtraDate(SIGN_TIME, "-1");
-        setExtraDate(SIGN_SONG_TIME, "-1");
     }
 }

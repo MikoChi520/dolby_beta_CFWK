@@ -3,13 +3,12 @@ package com.raincat.dolby_beta.helper;
 import com.google.gson.Gson;
 import com.ndktools.javamd5.core.MD5;
 import com.raincat.dolby_beta.model.CloudHeader;
-import com.raincat.dolby_beta.model.NeteaseSongListBean;
 import com.raincat.dolby_beta.net.Http;
 import com.raincat.dolby_beta.utils.NeteaseAES2;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.regex.Pattern;
@@ -25,31 +24,48 @@ import java.util.regex.Pattern;
  */
 
 public class EAPIHelper {
-    private static final Gson gson = new Gson();
 
     /**
      * 解除下载加密
      */
     public static String modifyPlayer(String original) {
-        NeteaseSongListBean listBean = gson.fromJson(original, NeteaseSongListBean.class);
-
-        NeteaseSongListBean modifyListBean = new NeteaseSongListBean();
-        modifyListBean.setCode(200);
-        modifyListBean.setData(new ArrayList<>());
-        for (NeteaseSongListBean.DataBean dataBean : listBean.getData()) {
-            //flag与8非0为云盘歌曲
-            if ((dataBean.getFlag() & 0x8) == 0) {
-
-                dataBean.setFee(0);
-                dataBean.setFlag(0);
-                dataBean.setPayed(0);
-                dataBean.setFreeTrialInfo(null);
-                if (dataBean.getUrl() != null && dataBean.getUrl().contains("?"))
-                    dataBean.setUrl(dataBean.getUrl().substring(0, dataBean.getUrl().indexOf("?")));
+        try {
+            JSONObject root = new JSONObject(original);
+            Object data = root.opt("data");
+            if (data instanceof JSONArray) {
+                JSONArray songs = (JSONArray) data;
+                for (int i = 0; i < songs.length(); i++) {
+                    JSONObject song = songs.optJSONObject(i);
+                    if (song != null) {
+                        modifySong(song);
+                    }
+                }
+            } else if (data instanceof JSONObject) {
+                modifySong((JSONObject) data);
+            } else {
+                return original;
             }
-            modifyListBean.getData().add(dataBean);
+            root.put("code", 200);
+            return root.toString();
+        } catch (Throwable ignored) {
+            return original;
         }
-        return gson.toJson(modifyListBean);
+    }
+
+    private static void modifySong(JSONObject song) throws Exception {
+        //flag 与 8 非 0 为云盘歌曲，保留原始 URL。
+        if ((song.optInt("flag", 0) & 0x8) != 0) {
+            return;
+        }
+        song.put("fee", 0);
+        song.put("flag", 0);
+        song.put("payed", 0);
+        song.put("freeTrialInfo", JSONObject.NULL);
+        String url = song.optString("url", "");
+        int query = url.indexOf('?');
+        if (query >= 0) {
+            song.put("url", url.substring(0, query));
+        }
     }
 
     /**

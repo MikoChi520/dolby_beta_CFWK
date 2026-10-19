@@ -14,7 +14,6 @@ import com.raincat.dolby_beta.helper.NotificationHelper;
 import com.raincat.dolby_beta.helper.SettingHelper;
 import com.raincat.dolby_beta.hook.AdAndUpdateHook;
 import com.raincat.dolby_beta.hook.AdExtraHook;
-import com.raincat.dolby_beta.hook.AutoSignInHook;
 import com.raincat.dolby_beta.hook.BlackHook;
 import com.raincat.dolby_beta.hook.CdnHook;
 import com.raincat.dolby_beta.hook.CommentHotClickHook;
@@ -31,6 +30,7 @@ import com.raincat.dolby_beta.hook.NightModeHook;
 import com.raincat.dolby_beta.hook.PlayerActivityHook;
 import com.raincat.dolby_beta.hook.SettingHook;
 import com.raincat.dolby_beta.hook.UserProfileHook;
+import com.raincat.dolby_beta.hook.WorkerPlaybackHook;
 import com.raincat.dolby_beta.hook.ListentogetherHook;
 import com.raincat.dolby_beta.utils.Tools;
 
@@ -92,8 +92,6 @@ public class Hook {
                             if (SettingHelper.getInstance().isEnable(SettingHelper.listen_key)) {
                                 new ListentogetherHook(context,versionCode);
                             }
-                            //自动签到
-                            new AutoSignInHook(context, versionCode);
                             //去广告与去升级
                             new AdAndUpdateHook(context, versionCode);
                             //修复magisk冲突导致的无法读写外置sd卡
@@ -107,6 +105,8 @@ public class Hook {
                                 new UserProfileHook(context);
                                 //网络访问
                                 new EAPIHook(context);
+                                if (SettingHelper.getInstance().isEnable(SettingHelper.worker_key))
+                                    new WorkerPlaybackHook(context);
                                 //下载MD5校验
                                 new DownloadMD5Hook(context);
                                 //夜间模式
@@ -160,6 +160,8 @@ public class Hook {
                                     if (msg_hook_play_process.equals(intent.getAction())) {
                                         ClassHelper.getCacheClassList(context, versionCode, () -> {
                                             new EAPIHook(context);
+                                            if (SettingHelper.getInstance().isEnable(SettingHelper.worker_key))
+                                                new WorkerPlaybackHook(context);
                                             new CdnHook(context, versionCode);
                                         });
                                     }

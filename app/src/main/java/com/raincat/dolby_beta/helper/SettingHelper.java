@@ -50,26 +50,19 @@ public class SettingHelper {
     public static final String update_key = "β_update_key";
     public static final String update_title = "隐藏升级提示";
 
-    public static final String sign_key = "β_sign_key";
-    public static final String sign_title = "自动签到";
-
-    public static final String sign_song_key = "β_sign_song_key";
-    public static final String sign_song_title = "每日歌曲打卡";
-    public static final String sign_song_sub = "获取每日推荐歌单中的歌曲进行打卡，有利于提高等级，会影响年度听歌总结且有可能会导致几天内签到天数不变，介意者慎用";
-
     public static final String proxy_key = "β_proxy_key";
     public static final String proxy_title = "Worker API 设置";
 
     public static final String background_key = "β_background_key";
     public static final String background_title = "播放界面背景设置";
 
-    public static final String worker_key = "β_worker_key";
+    public static final String worker_key = "β_worker_key_v2";
     public static final String worker_title = "Worker API 模式";
     public static final String worker_sub = "直接调用 Cloudflare Worker 补全音源";
 
-    public static final String worker_url_key = "β_worker_url_key";
+    public static final String worker_url_key = "β_worker_url_key_v2";
     public static final String worker_url_title = "Worker 地址";
-    public static final String worker_url_default = "https://music.nix.de5.net";
+    public static final String worker_url_default = "";
 
     public static final String kuwo_cookie_key = "β_kuwo_cookie_key";
     public static final String kuwo_cookie_title = "酷我Cookie";
@@ -158,10 +151,8 @@ public class SettingHelper {
         settingMap.put(listen_key, sharedPreferences.getBoolean(listen_key, false));
         settingMap.put(fix_comment_key, sharedPreferences.getBoolean(fix_comment_key, false));
         settingMap.put(update_key, sharedPreferences.getBoolean(update_key, true));
-        settingMap.put(sign_key, sharedPreferences.getBoolean(sign_key, false));
-        settingMap.put(sign_song_key, sharedPreferences.getBoolean(sign_song_key, false));
 
-        settingMap.put(worker_key, sharedPreferences.getBoolean(worker_key, true));
+        settingMap.put(worker_key, sharedPreferences.getBoolean(worker_key, false));
 
         settingMap.put(beauty_night_mode_key, sharedPreferences.getBoolean(beauty_night_mode_key, false));
         settingMap.put(beauty_tab_hide_key, sharedPreferences.getBoolean(beauty_tab_hide_key, false));
@@ -186,35 +177,6 @@ public class SettingHelper {
 
     public boolean isEnable(String key) {
         return getSetting(master_key) && getSetting(key);
-    }
-
-    private void deleteSetting(String key) {
-        if (sharedPreferences.contains(key)) {
-            sharedPreferences.edit().remove(key).apply();
-        }
-    }
-
-    public void resetSetting() {
-        deleteSetting(master_key);
-        deleteSetting(dex_key);
-        deleteSetting(warn_key);
-        deleteSetting(black_key);
-        deleteSetting(listen_key);
-        deleteSetting(fix_comment_key);
-        deleteSetting(update_key);
-        deleteSetting(sign_key);
-        deleteSetting(sign_song_key);
-        deleteSetting(worker_key);
-        deleteSetting(worker_url_key);
-        deleteSetting(beauty_night_mode_key);
-        deleteSetting(beauty_tab_hide_key);
-        deleteSetting(beauty_bubble_hide_key);
-        deleteSetting(beauty_banner_hide_key);
-        deleteSetting(beauty_ksong_hide_key);
-        deleteSetting(beauty_rotation_key);
-        deleteSetting(beauty_black_hide_key);
-        deleteSetting(beauty_comment_hot_key);
-        deleteSetting(beauty_background_key);
     }
 
     public HashMap<String, Boolean> getSidebarSetting(LinkedHashMap<String, String> map) {

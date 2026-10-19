@@ -64,9 +64,6 @@ import com.raincat.dolby_beta.view.setting.DexView;
 import com.raincat.dolby_beta.view.setting.FixCommentView;
 import com.raincat.dolby_beta.view.setting.MasterView;
 import com.raincat.dolby_beta.view.setting.ProxyView;
-import com.raincat.dolby_beta.view.setting.ResetModuleView;
-import com.raincat.dolby_beta.view.setting.SignSongDailyView;
-import com.raincat.dolby_beta.view.setting.SignView;
 import com.raincat.dolby_beta.view.setting.TitleView;
 import com.raincat.dolby_beta.view.setting.UpdateView;
 import com.raincat.dolby_beta.view.setting.ListenView;
@@ -1541,15 +1538,10 @@ public class SettingHook {
         fixCommentView.setBaseOnView(masterView);
         UpdateView updateView = new UpdateView(context);
         updateView.setBaseOnView(masterView);
-        SignView signView = new SignView(context);
-        signView.setBaseOnView(masterView);
-        SignSongDailyView signSongDailyView = new SignSongDailyView(context);
-        signSongDailyView.setBaseOnView(masterView);
         ProxyView proxyView = new ProxyView(context);
         proxyView.setBaseOnView(masterView);
         BeautyView beautyView = new BeautyView(context);
         beautyView.setBaseOnView(masterView);
-        ResetModuleView resetModuleView = new ResetModuleView(context);
 
 
         proxyView.setOnClickListener(view -> showProxyDialog(context));
@@ -1563,11 +1555,9 @@ public class SettingHook {
         dialogRoot.addView(listenView);
         dialogRoot.addView(fixCommentView);
         dialogRoot.addView(updateView);
-        dialogRoot.addView(signView);
-        dialogRoot.addView(signSongDailyView);
+
         dialogRoot.addView(proxyView);
         dialogRoot.addView(beautyView);
-        dialogRoot.addView(resetModuleView);
 
         dialogRoot.addView(new AboutView(context));
         showLightDialog(context, scrollView, false,
