@@ -20,7 +20,6 @@ import com.raincat.dolby_beta.hook.CdnHook;
 import com.raincat.dolby_beta.hook.CommentHotClickHook;
 import com.raincat.dolby_beta.hook.DownloadMD5Hook;
 import com.raincat.dolby_beta.hook.EAPIHook;
-import com.raincat.dolby_beta.hook.GrayHook;
 import com.raincat.dolby_beta.hook.HideBannerHook;
 import com.raincat.dolby_beta.hook.HideBubbleHook;
 import com.raincat.dolby_beta.hook.HideSidebarHook;
@@ -30,7 +29,6 @@ import com.raincat.dolby_beta.hook.LoginFixHook;
 import com.raincat.dolby_beta.hook.MagiskFixHook;
 import com.raincat.dolby_beta.hook.NightModeHook;
 import com.raincat.dolby_beta.hook.PlayerActivityHook;
-import com.raincat.dolby_beta.hook.ProxyHook;
 import com.raincat.dolby_beta.hook.SettingHook;
 import com.raincat.dolby_beta.hook.UserProfileHook;
 import com.raincat.dolby_beta.hook.ListentogetherHook;
@@ -85,8 +83,6 @@ public class Hook {
                             //总开关
                             if (!SettingHelper.getInstance().getSetting(SettingHelper.master_key))
                                 return;
-                            //音源代理
-                            new ProxyHook(context, false);
                             //黑胶
                             if (SettingHelper.getInstance().isEnable(SettingHelper.black_key)) {
                                 new BlackHook(context, versionCode);
@@ -96,8 +92,6 @@ public class Hook {
                             if (SettingHelper.getInstance().isEnable(SettingHelper.listen_key)) {
                                 new ListentogetherHook(context,versionCode);
                             }
-                            //不变灰
-                            new GrayHook(context);
                             //自动签到
                             new AutoSignInHook(context, versionCode);
                             //去广告与去升级
@@ -158,8 +152,6 @@ public class Hook {
                                 }
                             }, intentFilter);
                         } else if (processName.equals(PACKAGE_NAME + ":play") && SettingHelper.getInstance().getSetting(SettingHelper.master_key)) {
-                            //音源代理
-                            new ProxyHook(context, true);
                             IntentFilter intentFilter = new IntentFilter();
                             intentFilter.addAction(msg_hook_play_process);
                             context.registerReceiver(new BroadcastReceiver() {

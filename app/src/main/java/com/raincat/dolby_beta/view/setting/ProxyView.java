@@ -11,7 +11,7 @@ import com.raincat.dolby_beta.view.BaseDialogItem;
  *     author : RainCat
  *     e-mail : nining377@gmail.com
  *     time   : 2021/04/13
- *     desc   : 音源代理
+ *     desc   : Worker API 设置
  *     version: 1.0
  * </pre>
  */

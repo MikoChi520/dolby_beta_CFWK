@@ -66,7 +66,6 @@ import com.raincat.dolby_beta.view.setting.MasterView;
 import com.raincat.dolby_beta.view.setting.ProxyView;
 import com.raincat.dolby_beta.view.setting.ResetModuleView;
 import com.raincat.dolby_beta.view.setting.SignSongDailyView;
-import com.raincat.dolby_beta.view.setting.SignSongSelfView;
 import com.raincat.dolby_beta.view.setting.SignView;
 import com.raincat.dolby_beta.view.setting.TitleView;
 import com.raincat.dolby_beta.view.setting.UpdateView;
@@ -1465,7 +1464,7 @@ public class SettingHook {
             subView.setText("USERID失败");
         } else if (!SettingHelper.getInstance().getSetting(SettingHelper.master_key))
             subView.setText("已关闭");
-        else if (ExtraHelper.getExtraDate(ExtraHelper.SCRIPT_STATUS).equals("1"))
+        else if (SettingHelper.getInstance().isEnable(SettingHelper.worker_key))
             subView.setText("运行中");
         else
             subView.setText("未运行");
@@ -1481,7 +1480,6 @@ public class SettingHook {
         intentFilter.addAction(SettingHelper.beauty_setting);
         intentFilter.addAction(SettingHelper.sidebar_setting);
         intentFilter.addAction(SettingHelper.background_setting);
-        intentFilter.addAction(SettingHelper.proxy_configuration_setting);
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context c, Intent intent) {
@@ -1498,8 +1496,6 @@ public class SettingHook {
                     showSidebarDialog(context);
                 } else if (SettingHelper.background_setting.equals(action)) {
                     showPlayerBackgroundDialog(context);
-                } else if (SettingHelper.proxy_configuration_setting.equals(action)) {
-                    showProxyConfigurationDialog(context);
                 }
             }
         };
@@ -1549,8 +1545,6 @@ public class SettingHook {
         signView.setBaseOnView(masterView);
         SignSongDailyView signSongDailyView = new SignSongDailyView(context);
         signSongDailyView.setBaseOnView(masterView);
-        SignSongSelfView signSongSelfView = new SignSongSelfView(context);
-        signSongSelfView.setBaseOnView(masterView);
         ProxyView proxyView = new ProxyView(context);
         proxyView.setBaseOnView(masterView);
         BeautyView beautyView = new BeautyView(context);
@@ -1570,8 +1564,7 @@ public class SettingHook {
         dialogRoot.addView(fixCommentView);
         dialogRoot.addView(updateView);
         dialogRoot.addView(signView);
-        dialogRoot.addView(signSongDailyView);
-        dialogRoot.addView(signSongSelfView);
+        dialogRoot.addView(signSongDailyView);
         dialogRoot.addView(proxyView);
         dialogRoot.addView(beautyView);
         dialogRoot.addView(resetModuleView);
@@ -1585,60 +1578,19 @@ public class SettingHook {
     private void showProxyDialog(final Context context) {
         dialogProxyRoot = new BaseDialogItem(context);
         dialogProxyRoot.setOrientation(LinearLayout.VERTICAL);
-        ProxyMasterView proxyMasterView = new ProxyMasterView(context);
         ProxyWorkerView proxyWorkerView = new ProxyWorkerView(context);
-        proxyWorkerView.setBaseOnView(proxyMasterView);
         ProxyWorkerUrlView proxyWorkerUrlView = new ProxyWorkerUrlView(context);
         proxyWorkerUrlView.setBaseOnView(proxyWorkerView);
-        ProxyCoverView proxyCoverView = new ProxyCoverView(context);
-        proxyCoverView.setBaseOnView(proxyMasterView);
-        ProxyServerView proxyServerView = new ProxyServerView(context);
-        proxyServerView.setBaseOnView(proxyMasterView);
-        ProxyPriorityView proxyPriorityView = new ProxyPriorityView(context);
-        proxyPriorityView.setBaseOnView(proxyMasterView);
-        ProxyFlacView proxyFlacView = new ProxyFlacView(context);
-        proxyFlacView.setBaseOnView(proxyMasterView);
-        ProxyLocalVipView proxyLocalVipView = new ProxyLocalVipView(context);
-        proxyLocalVipView.setBaseOnView(proxyMasterView);
-        ProxyGrayView proxyGrayView = new ProxyGrayView(context);
-        proxyGrayView.setBaseOnView(proxyMasterView);
-        ProxyConfigurationView proxyConfigurationView = new ProxyConfigurationView(context);
-        proxyConfigurationView.setBaseOnView(proxyMasterView);
-
-
-        proxyConfigurationView.setOnClickListener(view -> showProxyConfigurationDialog(context));
 
         dialogProxyRoot.addView(new ProxyTitleView(context));
-        dialogProxyRoot.addView(proxyMasterView);
         dialogProxyRoot.addView(proxyWorkerView);
         dialogProxyRoot.addView(proxyWorkerUrlView);
-        dialogProxyRoot.addView(proxyCoverView);
-        dialogProxyRoot.addView(proxyServerView);
-        dialogProxyRoot.addView(proxyPriorityView);
-        dialogProxyRoot.addView(proxyFlacView);
-        dialogProxyRoot.addView(proxyLocalVipView);
-        dialogProxyRoot.addView(proxyGrayView);
-        dialogProxyRoot.addView(proxyConfigurationView);
 
         showLightDialog(context, dialogProxyRoot, true,
                 "仅保存", (dialogInterface, i) -> refresh(),
                 "保存并重启", (dialogInterface, i) -> restartApplication(context));
     }
-    private void showProxyConfigurationDialog(final Context context) {
-        dialogProxyRoot = new BaseDialogItem(context);
-        dialogProxyRoot.setOrientation(LinearLayout.VERTICAL);
 
-        dialogProxyRoot.addView(new ProxyConfigurationTitleView(context));
-        dialogProxyRoot.addView(new ProxyHttpView(context));
-        dialogProxyRoot.addView(new ProxyPortView(context));
-        dialogProxyRoot.addView(new ProxyOriginalView(context));
-        dialogProxyRoot.addView(new ProxyKuwoView(context));
-        dialogProxyRoot.addView(new ProxyQqView(context));
-        dialogProxyRoot.addView(new ProxyMiguView(context));
-        showLightDialog(context, dialogProxyRoot, true,
-                "仅保存", (dialogInterface, i) -> refresh(),
-                "保存并重启", (dialogInterface, i) -> restartApplication(context));
-    }
     private void showPlayerBackgroundDialog(final Context context) {
         dialogBeautyRoot = new BaseDialogItem(context);
         dialogBeautyRoot.setOrientation(LinearLayout.VERTICAL);
@@ -1715,7 +1667,6 @@ public class SettingHook {
     }
 
     private void restartApplication(Context context) {
-        ExtraHelper.setExtraDate(ExtraHelper.SCRIPT_STATUS, "0");
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> runningAppProcessInfoListist = activityManager.getRunningAppProcesses();
         for (ActivityManager.RunningAppProcessInfo runningAppProcessInfo : runningAppProcessInfoListist) {

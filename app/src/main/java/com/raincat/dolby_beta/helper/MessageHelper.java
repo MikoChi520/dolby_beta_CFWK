@@ -66,7 +66,7 @@ public class MessageHelper {
     private final static String transferClassNotFoundMessage = "找不到DownloadTransfer类，这将导致下载校验功能失效，" + normalMessage;
 
     public final static int coreClassNotFoundCode = 1002;
-    private final static String coreClassNotFoundMessage = "找不到核心类，这将导致音源代理功能失效，" + normalMessage;
+    private final static String coreClassNotFoundMessage = "找不到核心类，这将导致音源替换功能失效，" + normalMessage;
 
     public final static int tabClassNotFoundCode = 1003;
     private final static String tabClassNotFoundMessage = "找不到Tab类，这将导致Tab精简功能失效，" + normalMessage;

@@ -16,8 +16,6 @@ import com.raincat.dolby_beta.db.ExtraDao;
  */
 
 public class ExtraHelper {
-    //脚本运行情况，运行中1，未运行0
-    public static final String SCRIPT_STATUS = "script_status";
     //APP版本号
     public static final String APP_VERSION = "app_version";
 

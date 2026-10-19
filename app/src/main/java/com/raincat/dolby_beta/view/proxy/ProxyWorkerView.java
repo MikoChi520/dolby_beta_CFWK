@@ -7,7 +7,7 @@ import com.raincat.dolby_beta.helper.SettingHelper;
 import com.raincat.dolby_beta.view.BaseDialogItem;
 
 /**
- * Switch between the original HTTP proxy and the Cloudflare Worker JSON API.
+ * Cloudflare Worker JSON API switch.
  */
 public class ProxyWorkerView extends BaseDialogItem {
     public ProxyWorkerView(Context context, AttributeSet attrs, int defStyle) {

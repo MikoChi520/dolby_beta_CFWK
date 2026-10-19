@@ -32,9 +32,8 @@ public class EAPIHook {
         XposedBridge.hookMethod(ClassHelper.HttpResponse.getResultMethod(context), new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                //代理、Worker 和黑胶都未开启
+                //Worker 和黑胶都未开启
                 if (!SettingHelper.getInstance().isEnable(SettingHelper.black_key)
-                        && !SettingHelper.getInstance().isEnable(SettingHelper.proxy_master_key)
                         && !SettingHelper.getInstance().isEnable(SettingHelper.worker_key))
                     return;
                 //返回参数不对

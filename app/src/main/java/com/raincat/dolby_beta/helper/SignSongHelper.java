@@ -11,12 +11,8 @@ import com.raincat.dolby_beta.model.DailyRecommendListBean;
 import com.raincat.dolby_beta.model.PlaylistDetailBean;
 import com.raincat.dolby_beta.net.Http;
 import com.raincat.dolby_beta.utils.NeteaseAES;
-import com.raincat.dolby_beta.utils.Tools;
 import com.raincat.dolby_beta.view.BaseDialogItem;
 import com.raincat.dolby_beta.view.BaseDialogTextItem;
-import com.raincat.dolby_beta.view.sign.SignCountView;
-import com.raincat.dolby_beta.view.sign.SignIdView;
-import com.raincat.dolby_beta.view.sign.SignStartView;
 import com.raincat.dolby_beta.view.sign.SignTitleView;
 import com.raincat.tools.nettools.HttpConfig;
 import com.raincat.tools.nettools.NetCallBack;
@@ -28,8 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * <pre>
@@ -70,54 +64,6 @@ public class SignSongHelper {
     private static int playListIndex = 0, songIndex = 0, ignoreSignCount = 0, successSignCount = 0;
     //最大打卡个数
     private static int maxCount = 350;
-
-    public static void showSelfSignDialog(final Context context) {
-        init(context);
-
-        LinearLayout dialogSignRoot = new BaseDialogItem(context);
-        dialogSignRoot.setOrientation(LinearLayout.VERTICAL);
-        SignTitleView signTitleView = new SignTitleView(context);
-        signTitleView.setTitle(SettingHelper.sign_self_title);
-        dialogSignRoot.addView(signTitleView);
-        dialogSignRoot.addView(new SignIdView(context));
-        dialogSignRoot.addView(new SignStartView(context));
-        dialogSignRoot.addView(new SignCountView(context));
-
-        new AlertDialog.Builder(context)
-                .setView(dialogSignRoot)
-                .setCancelable(true)
-                .setPositiveButton("确定", (dialogInterface, i) -> {
-                    Pattern pattern = Pattern.compile("playlist/\\d+");
-                    Matcher matcher = pattern.matcher(SettingHelper.getInstance().getSignId());
-                    Pattern pattern2 = Pattern.compile("id=\\d+");
-                    Matcher matcher2 = pattern2.matcher(SettingHelper.getInstance().getSignId());
-                    Pattern pattern3 = Pattern.compile("[\\d]");
-                    Matcher matcher3 = pattern3.matcher(SettingHelper.getInstance().getSignId());
-                    long playListId = 0;
-                    if (matcher.find()) {
-                        playListId = Long.parseLong(matcher.group().substring(9));
-                    } else if (matcher2.find()) {
-                        playListId = Long.parseLong(matcher2.group().substring(3));
-                    } else if (matcher3.replaceAll("").length() == 0) {
-                        playListId = Long.parseLong(SettingHelper.getInstance().getSignId());
-                    } else
-                        Tools.showToastOnLooper(context, "歌单ID识别失败！");
-
-                    if (playListId != 0) {
-                        dailyRecommendListBean = new DailyRecommendListBean();
-                        DailyRecommendListBean.RecommendBean recommendBean = new DailyRecommendListBean.RecommendBean();
-                        recommendBean.setId(playListId);
-                        recommendBean.setName(playListId + "");
-                        dailyRecommendListBean.getRecommend().add(recommendBean);
-                        maxCount = SettingHelper.getInstance().getSignCount();
-                        songIndex = SettingHelper.getInstance().getSignStart();
-                        songIndex = (songIndex == 0 ? 0 : songIndex - 1);
-                        showSignStatusDialog(context, SettingHelper.sign_self_title, dailyRecommendListBean);
-                    } else
-                        end(context);
-                })
-                .setNegativeButton("取消", null).show();
-    }
 
     public static void showSignStatusDialog(Context context, String title, DailyRecommendListBean bean) {
         init(context);

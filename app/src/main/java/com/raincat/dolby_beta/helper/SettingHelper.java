@@ -23,7 +23,6 @@ public class SettingHelper {
     public static final String background_setting = "β_background_setting";
     public static final String beauty_setting = "β_beauty_setting";
     public static final String sidebar_setting = "β_sidebar_setting";
-    public static final String proxy_configuration_setting = "β_proxy_configuration_setting";
 
     public static final String master_key = "β_master_key";
     public static final String master_title = "总开关";
@@ -58,64 +57,19 @@ public class SettingHelper {
     public static final String sign_song_title = "每日歌曲打卡";
     public static final String sign_song_sub = "获取每日推荐歌单中的歌曲进行打卡，有利于提高等级，会影响年度听歌总结且有可能会导致几天内签到天数不变，介意者慎用";
 
-    public static final String sign_self_title = "自助打卡";
-
-    public static final String sign_id_key = "β_sign_id_key";
-    public static final String sign_id_title = "打卡歌单URL";
-
-    public static final String sign_start_key = "β_sign_start_key";
-    public static final String sign_start_title = "期望从第几首歌开始打？";
-    public static final int sign_start_default = 1;
-
-    public static final String sign_count_key = "β_sign_count_key";
-    public static final String sign_count_title = "期望打卡多少首歌？";
-    public static final int sign_count_default = 300;
-
     public static final String proxy_key = "β_proxy_key";
-    public static final String proxy_title = "音源代理设置";
+    public static final String proxy_title = "Worker API 设置";
 
     public static final String background_key = "β_background_key";
     public static final String background_title = "播放界面背景设置";
 
-    public static final String proxy_configuration_key = "β_proxy_configuration_key";
-    public static final String proxy_configuration_title = "代理参数配置";
-    public static final String proxy_configuration_sub = "在此填入对于代理服务器与相关脚本参数";
-
-    public static final String proxy_master_key = "β_proxy_master_key";
-    public static final String proxy_master_title = "代理开关";
-
-    public static final String proxy_server_key = "β_proxy_server_key";
-    public static final String proxy_server_title = "服务器代理模式";
-    public static final String proxy_server_sub = "如果您不想使用高占用的node，有自己的服务器代理可使用此方式并填写自己的服务器地址与端口，且使用服务器对应音质";
-
     public static final String worker_key = "β_worker_key";
     public static final String worker_title = "Worker API 模式";
-    public static final String worker_sub = "直接调用 Cloudflare Worker 补全音源，不启动本地脚本或 TLS 中间人；关闭后恢复原代理模式";
+    public static final String worker_sub = "直接调用 Cloudflare Worker 补全音源";
 
     public static final String worker_url_key = "β_worker_url_key";
     public static final String worker_url_title = "Worker 地址";
-    public static final String worker_url_default = "https://music.bro.us.ci";
-
-    public static final String proxy_priority_key = "β_proxy_priority_key";
-    public static final String proxy_priority_title = "音质优先";
-    public static final String proxy_priority_sub = "音质优先：使用外部音源提高音质，不可避免的会增大匹配错误概率\n匹配度优先：尽可能采用网易云音源，但非会员很多曲目只有128K/96K";
-
-    public static final String proxy_flac_key = "β_proxy_flac_key";
-    public static final String proxy_flac_title = "无损音质优先";
-    public static final String proxy_flac_sub = "使用外部音源时优先获取无损音质，但并不是100%能获取到无损音质";
-
-    public static final String local_vip_key = "β_local_vip_key";
-    public static final String local_vip_title = "脚本本地VIP";
-    public static final String local_vip_sub = "UnblockNeteaseMusic 的 ENABLE_LOCAL_VIP，与「本地黑胶」不同。可选关闭 / CVIP / SVIP";
-    public static final String local_vip_default = "";
-
-    public static final String proxy_gray_key = "β_proxy_gray_key";
-    public static final String proxy_gray_title = "不变灰";
-    public static final String proxy_gray_sub = "只影响显示效果，与能否播放无关，会导致无音源歌曲无法播放且无法自动跳过";
-
-    public static final String http_proxy_key = "β_http_proxy_key";
-    public static final String http_proxy_title = "代理服务器";
-    public static final String http_proxy_default = "127.0.0.1";
+    public static final String worker_url_default = "https://music.nix.de5.net";
 
     public static final String kuwo_cookie_key = "β_kuwo_cookie_key";
     public static final String kuwo_cookie_title = "酷我Cookie";
@@ -128,18 +82,6 @@ public class SettingHelper {
     public static final String migu_cookie_key = "β_migu_cookie_key";
     public static final String migu_cookie_title = "咪咕Cookie";
     public static final String migu_cookie_default = "<your_aversionid>";
-
-    public static final String proxy_port_key = "β_proxy_port_key";
-    public static final String proxy_port_title = "代理端口（1~65535）";
-    public static final int proxy_port_default = 23338;
-
-    public static final String proxy_original_key = "β_proxy_original_key";
-    public static final String proxy_original_title = "代理源（空格隔开）";
-    public static final String proxy_original_default = "pyncmd kuwo";
-
-    public static final String proxy_cover_key = "β_proxy_cover_key";
-    public static final String proxy_cover_title = "重新释放脚本";
-    public static final String proxy_cover_sub = "当更新后或者发现UnblockNeteaseMusic运行不正常时可尝试重新释放脚本";
 
     public static final String beauty_key = "β_beauty_key";
     public static final String beauty_title = "美化设置";
@@ -219,12 +161,7 @@ public class SettingHelper {
         settingMap.put(sign_key, sharedPreferences.getBoolean(sign_key, false));
         settingMap.put(sign_song_key, sharedPreferences.getBoolean(sign_song_key, false));
 
-        settingMap.put(proxy_master_key, sharedPreferences.getBoolean(proxy_master_key, true));
         settingMap.put(worker_key, sharedPreferences.getBoolean(worker_key, true));
-        settingMap.put(proxy_server_key, sharedPreferences.getBoolean(proxy_server_key, false));
-        settingMap.put(proxy_priority_key, sharedPreferences.getBoolean(proxy_priority_key, false));
-        settingMap.put(proxy_flac_key, sharedPreferences.getBoolean(proxy_flac_key, false));
-        settingMap.put(proxy_gray_key, sharedPreferences.getBoolean(proxy_gray_key, false));
 
         settingMap.put(beauty_night_mode_key, sharedPreferences.getBoolean(beauty_night_mode_key, false));
         settingMap.put(beauty_tab_hide_key, sharedPreferences.getBoolean(beauty_tab_hide_key, false));
@@ -267,14 +204,8 @@ public class SettingHelper {
         deleteSetting(update_key);
         deleteSetting(sign_key);
         deleteSetting(sign_song_key);
-        deleteSetting(proxy_master_key);
         deleteSetting(worker_key);
         deleteSetting(worker_url_key);
-        deleteSetting(proxy_server_key);
-        deleteSetting(proxy_priority_key);
-        deleteSetting(proxy_flac_key);
-        deleteSetting(local_vip_key);
-        deleteSetting(proxy_gray_key);
         deleteSetting(beauty_night_mode_key);
         deleteSetting(beauty_tab_hide_key);
         deleteSetting(beauty_bubble_hide_key);
@@ -301,64 +232,6 @@ public class SettingHelper {
         sharedPreferences.edit().putBoolean(key, value).apply();
     }
 
-    public String getSignId() {
-        return sharedPreferences.getString(SettingHelper.sign_id_key, "");
-    }
-
-    public void setSignId(String id) {
-        if (!TextUtils.isEmpty(id))
-            sharedPreferences.edit().putString(SettingHelper.sign_id_key, id).apply();
-    }
-
-    public int getSignStart() {
-        return sharedPreferences.getInt(SettingHelper.sign_start_key, SettingHelper.sign_start_default);
-    }
-
-    public void setSignStart(String start) {
-        if (!TextUtils.isEmpty(start))
-            sharedPreferences.edit().putInt(SettingHelper.sign_start_key, Integer.parseInt(start)).apply();
-    }
-
-    public int getSignCount() {
-        return sharedPreferences.getInt(SettingHelper.sign_count_key, SettingHelper.sign_count_default);
-    }
-
-    public void setSignCount(String start) {
-        if (!TextUtils.isEmpty(start))
-            sharedPreferences.edit().putInt(SettingHelper.sign_count_key, Integer.parseInt(start)).apply();
-    }
-
-    public int getProxyPort() {
-        return sharedPreferences.getInt(SettingHelper.proxy_port_key, SettingHelper.proxy_port_default);
-    }
-
-    public void setProxyPort(String port) {
-        if (!TextUtils.isEmpty(port))
-            sharedPreferences.edit().putInt(SettingHelper.proxy_port_key, Integer.parseInt(port)).apply();
-    }
-
-    public String getProxyOriginal() {
-        return sharedPreferences.getString(SettingHelper.proxy_original_key, SettingHelper.proxy_original_default);
-    }
-
-    public void setProxyOriginal(String original) {
-        if (!TextUtils.isEmpty(original))
-            sharedPreferences.edit().putString(SettingHelper.proxy_original_key, original).apply();
-    }
-
-    public void setHttpProxy(String http) {
-        if (!TextUtils.isEmpty(http))
-            sharedPreferences.edit().putString(SettingHelper.http_proxy_key, http).apply();
-    }
-
-    public String getHttpProxy() {
-        return sharedPreferences.getString(SettingHelper.http_proxy_key, SettingHelper.http_proxy_default);
-    }
-    public String getLocalVip() {
-        String value = sharedPreferences.getString(SettingHelper.local_vip_key, SettingHelper.local_vip_default);
-        return value == null ? "" : value.trim();
-    }
-
     public String getWorkerUrl() {
         String value = sharedPreferences.getString(SettingHelper.worker_url_key, SettingHelper.worker_url_default);
         return value == null ? SettingHelper.worker_url_default : value.trim();
@@ -366,16 +239,6 @@ public class SettingHelper {
 
     public void setWorkerUrl(String url) {
         sharedPreferences.edit().putString(SettingHelper.worker_url_key, url == null ? "" : url.trim()).apply();
-    }
-
-    public void setLocalVip(String value) {
-        String normalized = value == null ? "" : value.trim().toLowerCase();
-        if ("true".equals(normalized)) {
-            normalized = "cvip";
-        } else if ("false".equals(normalized) || "off".equals(normalized) || "0".equals(normalized)) {
-            normalized = "";
-        }
-        sharedPreferences.edit().putString(SettingHelper.local_vip_key, normalized).apply();
     }
 
     public String getKuwoCookie() {
