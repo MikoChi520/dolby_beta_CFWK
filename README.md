@@ -13,11 +13,20 @@
 
 ## 工作原理
 
-模块在网易云拿到播放/下载响应后，把歌曲 ID 发给 Cloudflare Worker：
+模块在网易云拿到播放/下载响应后，把网易云歌曲 ID 发给 Cloudflare Worker：
 
 ```text
 https://你的-worker/api/song/enhance/player/url?ids=[歌曲ID]
 ```
+
+Worker 会先用这个 ID 查询网易云元数据（歌名、歌手、专辑、时长），再按音源分别处理：
+
+- **pyncmd**：直接把网易云 ID 传给第三方 API。
+- **netease**：直接用网易云 ID 调 oiapi。
+- **qq**：用歌名和歌手搜索 QQ 音乐，再按时长做近似匹配。
+- **custom**：用同一组关键词请求自定义搜索接口，按时长排序；媒体请求使用该源返回的 `songid`/`songmid`，不是网易云 ID。
+
+所以只有 pyncmd 和 netease 是“网易云 ID 直接对应”；QQ 和自定义源是“先搜元数据、再按时长匹配”，可能匹配到翻唱、Live 或错误版本。
 
 Worker 返回可用的音频地址后，模块只替换播放地址，不修改网易云账号数据，也不代理音频流量。
 
