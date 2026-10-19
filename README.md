@@ -15,18 +15,6 @@
 
 <img src="image/setting_rn.png" width="30%"> <img src="image/proxy_settings.png" width="30%"> <img src="image/about_ncm.png" width="30%">
 
-## 4.1.0 更新
-
-- 内嵌 [UnblockNeteaseMusic/server](https://github.com/UnblockNeteaseMusic/server) `enhanced` 最新脚本（v0.28.0）
-
-[下载 Release](https://github.com/NikolaJyun/dolby_beta/releases/latest)
-
-## 打赏
-
-如果这个模块对你有帮助，欢迎打赏支持。
-
-<img src="image/donate_wechat.png" width="40%"> <img src="image/donate_alipay.png" width="40%">
-
 ## 致谢
 
 [UnblockNeteaseMusic/server](https://github.com/UnblockNeteaseMusic/server)
